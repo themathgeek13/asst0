@@ -1,4 +1,4 @@
-# Assignment 1: Code Performance Analysis on a Quad-Core CPU #
+# Assignment 1: Performance Analysis on a Quad-Core CPU #
 
 **Due: Thursday Jan 18, 11:59PM EST**
 
