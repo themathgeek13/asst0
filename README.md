@@ -1,6 +1,6 @@
 # Assignment 1: Performance Analysis on a Quad-Core CPU #
 
-**Due: Thursday Jan 18, 11:59PM EST**
+**Due: Fri Jan 19, 11:59PM EST**
 
 **100 points total + 6 points extra credit**
 
