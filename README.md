@@ -85,7 +85,7 @@ You will not need to make use of any other pthread API calls in this assignment.
   synchronization between threads in your solution. We are expecting you to come up with a single work decomposition policy that will work well for all thread counts---hard coding a solution specific to each configuration is not allowed! (Hint: There is a very simple static
   assignment that will achieve this goal, and no communication/synchronization
   among threads is necessary.). In your writeup, describe your approach to parallelization
-  and report the final 8-thread speedup obtained. Also comment on the difference in scaling behavior from 2-4 to and 4-8 threads.
+  and report the final 8-thread speedup obtained. 
 
   
 ## Program 2: Vectorizing Code Using SIMD Intrinsics (25 points) ##
