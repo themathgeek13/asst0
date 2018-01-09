@@ -31,25 +31,25 @@ for kicks, you may also want to run these programs on your own machine. (You wil
 
 To get started:
 
-1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `/usr/local/depot/ispc-v1.9.1-linux/`. __You will need to add this directory to your system path__.
+1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `XXXXXX`. __You will need to add this directory to your system path__.
 2. We will be distributing assignment starter code via git repos hosted on [github](https://github.com/stanford-cs348v/asst1). Clone the assignment 1 starter code using: `git@github.com:stanford-cs348v/asst1.git`
 
 ## Program 1: Parallel Fractal Generation Using Pthreads (25 points) ##
 
-Build and run the code in the `prog1_mandelbrot_threads/` directory of the
-Assignment 1 code base. This program produces the image file
-`mandelbrot-serial.ppm`[^3], which is a visualization of a famous set of complex
-numbers called the Mandelbrot set. As you can see in the images below, the result is a familiar and beautiful fractal.
-Each pixel in the image corresponds to a value in the complex plane, and the
-brightness of each pixel is proportional to the computational cost of
-determining whether the value is contained in the Mandelbrot set. To get image 2, 
-use the command option `--view 2`.
-(See function `mandelbrotSerial()` defined in `mandelbrotSerial.cpp`). You can learn more
-about the definition of the Mandelbrot set at
+Build and run the code in the `prog1_mandelbrot_threads/` directory of
+the Assignment 1 code base. This program produces the image file
+`mandelbrot-serial.ppm`, which is a visualization of a famous set of
+complex numbers called the Mandelbrot set. (Most platforms have a .ppm
+view. For example, to view the resulting images remotely, use `ssh -Y`
+and the `display` command.) As you can see in the images below, the
+result is a familiar and beautiful fractal.  Each pixel in the image
+corresponds to a value in the complex plane, and the brightness of
+each pixel is proportional to the computational cost of determining
+whether the value is contained in the Mandelbrot set. To get image 2,
+use the command option `--view 2`.  (See function `mandelbrotSerial()`
+defined in `mandelbrotSerial.cpp`). You can learn more about the
+definition of the Mandelbrot set at
 <http://en.wikipedia.org/wiki/Mandelbrot_set>.
-
-
-[^3]: To view the resulting images remotely, use `ssh -Y` and the `display` command.
 
 
 ![Mandelbrot Set](http://graphics.stanford.edu/courses/cs348v-18-winter/asst_images/asst1/mandelbrot_viz.jpg "A visualization of the Mandelbrot set. The cost of computing each pixel is proportional to its brightness. When running programs 1 and 3, you can use the command line option `--view 2` to set output to be view 2.")
@@ -70,22 +70,22 @@ You will not need to make use of any other pthread API calls in this assignment.
   thread 0, and the bottom half of the image in thread 1. This type
     of problem decomposition is referred to as _spatial decomposition_ since
   different spatial regions of the image are computed by different processors.
-2.  Extend your code to utilize 2, 4, 6, and 8 threads, partitioning the image
+2.  Extend your code to use 2, 3, 4, 4, 6, 7, and 8 threads, partitioning the image
   generation work accordingly. Note that the processor only has four cores but each
   core supports two hyper-threads, so it can execute eight threads interleaved on its execution contents.
   In your write-up, produce a graph of
   __speedup compared to the reference sequential implementation__ as a function of the number of cores used FOR VIEW 1. Is speedup linear in
-  the number of cores used? In your writeup hypothesize why this is (or is not) the case? (you may also wish to produce a graph for VIEW 2 to help you come up with an answer.)  
+  the number of cores used? In your writeup hypothesize why this is (or is not) the case? (you may also wish to produce a graph for VIEW 2 to help you come up with a good answer.)  
 3.  To confirm (or disprove) your hypothesis, measure the amount of time
   each thread requires to complete its work by inserting timing code at
   the beginning and end of `workerThreadStart()`. How do your measurements
   explain the speedup graph you previously created?
 4.  Modify the mapping of work to threads to achieve to improve speedup to
-  at __about 8.5x on both views__ of the Mandelbrot set (if you're close to 8.5x that's fine, don't sweat it). You may not use any
-  synchronization between threads. We are expecting you to come up with a single work decomposition policy that will work well for all thread counts---hard coding a solution specific to each configuration is not allowed! (Hint: There is a very simple static
+  at __about 7-8x on both views__ of the Mandelbrot set (if you're above 7x that's fine, don't sweat it). You may not use any
+  synchronization between threads in your solution. We are expecting you to come up with a single work decomposition policy that will work well for all thread counts---hard coding a solution specific to each configuration is not allowed! (Hint: There is a very simple static
   assignment that will achieve this goal, and no communication/synchronization
-  among threads is necessary.). In your writeup, describe your approach
-  and report the final 16-thread speedup obtained. Also comment on the difference in scaling behavior from 4 to 8 threads vs 8 to 16 threads.
+  among threads is necessary.). In your writeup, describe your approach to parallelization
+  and report the final 8-thread speedup obtained. Also comment on the difference in scaling behavior from 2-4 to and 4-8 threads.
 
   
 ## Program 2: Vectorizing Code Using SIMD Intrinsics (25 points) ##
