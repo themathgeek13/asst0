@@ -68,8 +68,8 @@ bool verifyResult (int *gold, int *result, int width, int height) {
 
 int main(int argc, char** argv) {
 
-    const unsigned int width = 1200;
-    const unsigned int height = 800;
+    const unsigned int width = 1600;
+    const unsigned int height = 1200;
     const int maxIterations = 256;
     int numThreads = 2;
 
@@ -121,14 +121,15 @@ int main(int argc, char** argv) {
 
     int* output_serial = new int[width*height];
     int* output_thread = new int[width*height];
-
+    
     //
     // Run the serial implementation.  Run the code three times and
     // take the minimum to get a good estimate.
     //
-    memset(output_serial, 0, width * height * sizeof(int));
+
     double minSerial = 1e30;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 5; ++i) {
+       memset(output_serial, 0, width * height * sizeof(int));
         double startTime = CycleTimer::currentSeconds();
         mandelbrotSerial(x0, y0, x1, y1, width, height, 0, height, maxIterations, output_serial);
         double endTime = CycleTimer::currentSeconds();
@@ -141,9 +142,10 @@ int main(int argc, char** argv) {
     //
     // Run the threaded version
     //
-    memset(output_thread, 0, width * height * sizeof(int));
+
     double minThread = 1e30;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 5; ++i) {
+      memset(output_thread, 0, width * height * sizeof(int));
         double startTime = CycleTimer::currentSeconds();
         mandelbrotThread(numThreads, x0, y0, x1, y1, width, height, maxIterations, output_thread);
         double endTime = CycleTimer::currentSeconds();
