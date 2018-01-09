@@ -20,7 +20,7 @@ programming, but a lot of analysis!
 ## Environment Setup ##
 
 __You will need to run code on the new myth machines for this assignment.__
-(Hostnames for these machines are `myth[51-66].ghc.andrew.cmu.edu`)
+(Hostnames for these machines are `myth[51-66].stanford.edu`)
 These machines contain four-core 4.2 GHz Intel Core i7 processors (although dynamic frequency scaling can take them to 4.5 GHz when the chip decides it is useful and possible to do so). Each core in the processor can execute AVX2 vector instructions which describe
 simultaneous execution of the same operation on multiple single-precision data
 values. For the curious, a complete specification for this CPU can be found at 
@@ -31,7 +31,7 @@ for kicks, you may also want to run these programs on your own machine. (You wil
 
 To get started:
 
-1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `XXXXXX`. __You will need to add this directory to your system path__.
+1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `/afs/.ir/users/k/a/kayvonf/public/cs348v/ispc`. __You will need to add this directory to your system path__.
 2. We will be distributing assignment starter code via git repos hosted on [github](https://github.com/stanford-cs348v/asst1). Clone the assignment 1 starter code using: `git@github.com:stanford-cs348v/asst1.git`
 
 ## Program 1: Parallel Fractal Generation Using Pthreads (25 points) ##
