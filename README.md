@@ -31,7 +31,7 @@ for kicks, you may also want to run these programs on your own machine. (You wil
 
 To get started:
 
-1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `/afs/.ir/users/k/a/kayvonf/public/cs348v/ispc`. __You will need to add this directory to your system path__.
+1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `/afs/.ir/users/k/a/kayvonf/public/cs348v/ispc`. __You will need to add this directory to your system path, or download ISPC compiler binaries locally from <http://ispc.github.io/downloads.html>__.
 2. We will be distributing assignment starter code via git repos hosted on [github](https://github.com/stanford-cs348v/asst1). Clone the assignment 1 starter code using: `git@github.com:stanford-cs348v/asst1.git`
 
 ## Program 1: Parallel Fractal Generation Using Pthreads (25 points) ##
