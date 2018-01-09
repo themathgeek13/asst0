@@ -1,3 +1,5 @@
+# Assignment 1: Code Performance Analysis on a Quad-Core CPU #
+
 **Due: Thursday Jan 18, 11:59PM EST**
 
 **100 points total + 6 points extra credit**
@@ -8,9 +10,7 @@ This assignment is intended to help you develop an understanding of the two
 primary forms of parallel execution present in a modern multi-core CPU:
 
 1. SIMD execution within a single processing core
-2. Parallel execution using multiple cores
-
-(As as much as we'd like to avoid them in this assignment, you'll see some affects of Intel Hyper-Threading as well.)
+2. Parallel execution using multiple cores (You'll see effects of Intel Hyper-Threading as well.)
 
 You will also gain experience measuring and reasoning about the
 performance of parallel programs (a challenging, but important, skill you will
@@ -70,9 +70,9 @@ You will not need to make use of any other pthread API calls in this assignment.
   thread 0, and the bottom half of the image in thread 1. This type
     of problem decomposition is referred to as _spatial decomposition_ since
   different spatial regions of the image are computed by different processors.
-2.  Extend your code to utilize 2, 4, 8, and 16 threads, partitioning the image
-  generation work accordingly. Note that the processor only has 8 cores but each
-  core supports two hyper-threads.
+2.  Extend your code to utilize 2, 4, 6, and 8 threads, partitioning the image
+  generation work accordingly. Note that the processor only has four cores but each
+  core supports two hyper-threads, so it can execute eight threads interleaved on its execution contents.
   In your write-up, produce a graph of
   __speedup compared to the reference sequential implementation__ as a function of the number of cores used FOR VIEW 1. Is speedup linear in
   the number of cores used? In your writeup hypothesize why this is (or is not) the case? (you may also wish to produce a graph for VIEW 2 to help you come up with an answer.)  
@@ -93,8 +93,8 @@ You will not need to make use of any other pthread API calls in this assignment.
 Take a look at the function `clampedExpSerial` in `prog2_vecintrin/main.cpp` of the
 Assignment 1 code base.  The `clampedExp()` function raises `values[i]` to the power given by `exponents[i]` for all elements of the input array and clamps the resulting values at 9.999999.  In program 2, your job is to vectorize this piece of code so it can be run on a machine with SIMD vector instructions.
 
-However, rather than craft an implementation using SSE or AVX2 vector intrinsics that map to real vector instructions on moderns CPUs, to make things a little easier, we're asking you to implement your version using 15-418's "fake vector intrinsics" defined in `CS348Vintrin.h`.   The `CS348Vintrin.h` library provides you with a set of vector instructions that operate
-on vector values and/or vector masks. (These functions don't translate to real CMU vector instructions, instead we simulate these operations for you in our library, and provide feedback that makes for easier debugging.)  As an example of using the 15-418 intrinsics, a vectorized version of the `abs()` function is given in `main.cpp`. This example contains some basic vector loads and stores and manipulates mask registers.  Note that the `abs()` example is only a simple example, and in fact the code does not correctly handle all inputs! (We will let you figure out why!) You may wish to read through all the comments and function definitions in `CS348Vintrin.h` to know what operations are available to you. 
+However, rather than craft an implementation using SSE or AVX2 vector intrinsics that map to real vector instructions on modern CPUs, to make things a little easier, we're asking you to implement your version using CS348V's "fake vector intrinsics" defined in `CS348Vintrin.h`.   The `CS348Vintrin.h` library provides you with a set of vector instructions that operate
+on vector values and/or vector masks. (These functions don't translate to real CPU vector instructions, instead we simulate these operations for you in our library, and provide feedback that makes for easier debugging.)  As an example of using the CS348V intrinsics, a vectorized version of the `abs()` function is given in `main.cpp`. This example contains some basic vector loads and stores and manipulates mask registers.  Note that the `abs()` example is only a simple example, and in fact the code does not correctly handle all inputs! (We will let you figure out why!) You may wish to read through all the comments and function definitions in `CS348Vintrin.h` to know what operations are available to you. 
 
 Here are few hints to help you in your implementation:
 
@@ -110,9 +110,9 @@ Use function `addUserLog()` to add customized debug information in log. Feel fre
 The output of the program will tell you if your implementation generates correct output. If there
 are incorrect results, the program will print the first one it finds and print out a table of
 function inputs and outputs. Your function's output is after "output = ", which should match with 
-the results after "gold = ". The program also prints out a list of statistics describing utilization of the 15418 fake vector
+the results after "gold = ". The program also prints out a list of statistics describing utilization of the CS348V fake vector
 units. You should consider the performance of your implementation to be the value "Total Vector 
-Instructions". (You can assume every 15-418 fake vector instruction takes one cycle on the 15-418 fake SIMD CPU.) "Vector Utilization" 
+Instructions". (You can assume every CS348V fake vector instruction takes one cycle on the CS348V fake SIMD CPU.) "Vector Utilization" 
 shows the percentage of vector lanes that are enabled. 
 
 **What you need to do:**
@@ -127,20 +127,22 @@ Does the vector utilization increase, decrease or stay the same as `VECTOR_WIDTH
 
 ## Program 3: Parallel Fractal Generation Using ISPC (15 points) ##
 
-Now that you're comfortable with SIMD execution, we'll return to parallel Mandelbrot fractal generation (like in program 1). Like Program 1, Program 3 computes a mandelbrot fractal image, but it achieves even greater speedups by utilizing both the CPUs 8 cores and the SIMD execution units within each core.
+Now that you're comfortable with SIMD execution, we'll return to parallel Mandelbrot fractal generation (like in program 1). Like Program 1, Program 3 computes a mandelbrot fractal image, but it achieves even greater speedups by utilizing both the CPU's four cores and the SIMD execution units within each core.
 
-In Program 1, you parallelized image generation by creating one thread for each
-processing core in the system. Then, you assigned parts of the computation to
-each of these concurrently executing threads.[^4] Instead of specifying a specific mapping of computations to concurrently executing threads, Program 3 uses ISPC language constructs to describe
+In Program 1, you parallelized image generation by creating one thread
+for each processing core in the system. Then, you assigned parts of
+the computation to each of these concurrently executing
+threads. (Since pthreads were one-to-one with processing cores in
+Program 1, you effectively assigned work explicitly to cores.) Instead
+of specifying a specific mapping of computations to concurrently
+executing threads, Program 3 uses ISPC language constructs to describe
 *independent computations*. These computations may be executed in
-parallel without violating program correctness (and indeed they will!). In the
-case of the Mandelbrot image, computing the value of each pixel is an
-independent computation. With this information, the ISPC compiler and runtime
-system take on the responsibility of generating a program that utilizes the
-CPUs collection of parallel execution resources as efficiently as possible.
-
-[^4]: Since pthreads were one-to-one with processing cores in Program 1, you effectively assigned work explicitly to cores.
-
+parallel without violating program correctness (and indeed they
+will!). In the case of the Mandelbrot image, computing the value of
+each pixel is an independent computation. With this information, the
+ISPC compiler and runtime system take on the responsibility of
+generating a program that utilizes the CPU's collection of parallel
+execution resources as efficiently as possible.
 
 You will make a simple fix to Program 3 which is written in a combination of
 C++ and ISPC (the error causes a performance problem, not a correctness one).
@@ -164,7 +166,7 @@ be thought of as spawning a group of concurrent ISPC program instances
 (referred to in the ISPC documentation as a gang). The gang of instances
 runs to completion, then control returns back to the calling C code.
 
-__Stop. This is your friendly instructor. Please read the preceeding paragraph again. Trust me.__
+__Stop. This is your friendly instructor. Please read the preceding paragraph again. Trust me.__
 
 As an example, the following program uses a combination of regular C code and ISPC
 code to add two 1024-element vectors. As we discussed in class, since each
@@ -334,8 +336,6 @@ Note: This problem is a review to double-check your understanding, as it covers 
     produced using ISPC when its compile flag is set to emit AVX2 (`--target=avx2-i32x8`). You may find the 
     [Intel Intrinsics Guide](http://software.intel.com/en-us/articles/intel-intrinsics-guide) 
     very helpful.
- 
-Notes and comments: When running your "very-good-case input", take a look at what the benefit of multi-core execution is.  You might be surprised at how high it is.  (This is a hyper-threading effect. If interested, come talk to the staff.)
  
 ## Program 5: BLAS `saxpy` (15 points) ##
 
