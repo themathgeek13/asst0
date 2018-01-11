@@ -125,7 +125,7 @@ Does the vector utilization increase, decrease or stay the same as `VECTOR_WIDTH
 3.  _Extra credit: (1 point)_ Implement a vectorized version of `arraySumSerial` in `arraySumVector`. Your implementation may assume that `VECTOR_WIDTH` is a factor of the input array size `N`. Whereas the serial implementation has `O(N)` span, your implementation should have at most `O(N / VECTOR_WIDTH + log2(VECTOR_WIDTH))` span.  You may find the `hadd` and `interleave` operations useful.
 
 
-## Program 3: Parallel Fractal Generation Using ISPC (15 points) ##
+## Program 3: Parallel Fractal Generation Using ISPC (20 points) ##
 
 Now that you're comfortable with SIMD execution, we'll return to parallel Mandelbrot fractal generation (like in program 1). Like Program 1, Program 3 computes a mandelbrot fractal image, but it achieves even greater speedups by utilizing both the CPU's four cores and the SIMD execution units within each core.
 
