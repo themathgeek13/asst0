@@ -32,7 +32,9 @@ int main() {
         // TODO: CS348V students.  Attempt to change the values in the array here.
        
         // random input values
-        values[i] = .001f + 2.998f * static_cast<float>(rand()) / RAND_MAX;
+        //values[i] = .001f + 2.998f * static_cast<float>(rand()) / RAND_MAX;
+      //values[i] = 2.99f;
+      values[i] = 1.f;
       
         output[i] = 0.f;
     }

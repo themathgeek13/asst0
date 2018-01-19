@@ -281,7 +281,7 @@ different CPU cores).
   `mandelbrot_ispc --tasks` by changing the number of tasks the code
   creates. By only changing code in the function
   `mandelbrot_ispc_withtasks()`, you should be able to achieve
-  performance that exceeds the sequential version of the code by about 16-18 times!
+  performance that exceeds the sequential version of the code by over 40 times!
   How did you determine how many tasks to create? Why does the
   number you chose work best?
 3.  _Extra Credit: (2 points)_ What are differences between the pthread
