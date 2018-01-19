@@ -362,12 +362,12 @@ Notes: Some students have gotten hung up on this question (thinking too hard) in
 
 ## Hand-in Instructions ##
 
-__Instructions will be provided shortly.__  Please place the following files in your handin directory:
+Handin will be performed via [Canvas](https://canvas.stanford.edu/). I'd like everyone to hand in a zip file which contains two files:
 
 * Your writeup, in a file called `writeup.pdf`
 * Your implementation of `main.cpp` in Program 2, in a file called `prob2.cpp`
 
-If you would like to hand in code, for example, because you successfully completed an extra credit, you are free to include that as well in a single tar file.  Please tell the TAs to look for your extra credit. When handed in, all code must be compilable and runnable!
+If you would like to hand in code, for example, because you successfully completed an extra credit, you are free to include that as well. Please tell the staff to look for your extra credit in your writeup. When handed in, all code must be compilable and runnable!
 
 ## Resources and Notes ##
 
