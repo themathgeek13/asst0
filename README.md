@@ -1,6 +1,4 @@
-# Assignment 1: Performance Analysis on a Quad-Core CPU #
-
-**Due: Fri Jan 19, 11:59PM EST**
+# Optional Assignment: Performance Analysis on a Quad-Core CPU #
 
 **100 points total + 6 points extra credit**
 
@@ -26,18 +24,18 @@ simultaneous execution of the same operation on multiple single-precision data
 values. For the curious, a complete specification for this CPU can be found at 
 <https://ark.intel.com/products/97129/Intel-Core-i7-7700K-Processor-8M-Cache-up-to-4_50-GHz>.
 
-Note: We will grade your analysis of code assuming it is run on myth machines, however
-for kicks, you may also want to run these programs on your own machine. (You will first need to install the Intel SPMD Program Compiler (ISPC) available here: <http://ispc.github.com/>). Feel free to include your findings from running code on other machines in your report as well, just be very clear what machine you were running on. 
+Note: We expect you to report on the performance of code run on the Stanford myth machines, however
+for kicks, you may also want to run the programs in this assignment on your own machine. (You will first need to install the Intel SPMD Program Compiler (ISPC) available here: <http://ispc.github.com/>). Feel free to include your findings from running code on other machines in your report as well, just be very clear what machine you were running on. 
 
 To get started:
 
-1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `/afs/.ir/users/k/a/kayvonf/public/cs348v/ispc`. __You will need to add this directory to your system path, or download ISPC compiler binaries locally from <http://ispc.github.io/downloads.html>__.
-2. We will be distributing assignment starter code via git repos hosted on [github](https://github.com/stanford-cs348v/asst1). Clone the assignment 1 starter code using: `git@github.com:stanford-cs348v/asst1.git`
+1. ISPC is needed to compile many of the programs used in this assignment. ISPC is currently installed on the myth machines in the directory `/afs/.ir/users/k/a/kayvonf/public/cs348k/ispc`. __You will need to add this directory to your system path, or download ISPC compiler binaries locally from <http://ispc.github.io/downloads.html>__.
+2. We will be distributing assignment starter code via git repos hosted on [github](https://github.com/stanford-cs348k/asst0). Clone the assignment 1 starter code using: `git@github.com:stanford-cs348k/asst0.git`
 
 ## Program 1: Parallel Fractal Generation Using Pthreads (25 points) ##
 
 Build and run the code in the `prog1_mandelbrot_threads/` directory of
-the Assignment 1 code base. This program produces the image file
+the code base. This program produces the image file
 `mandelbrot-serial.ppm`, which is a visualization of a famous set of
 complex numbers called the Mandelbrot set. (Most platforms have a .ppm
 view. For example, to view the resulting images remotely, use `ssh -Y`
@@ -93,26 +91,26 @@ You will not need to make use of any other pthread API calls in this assignment.
 Take a look at the function `clampedExpSerial` in `prog2_vecintrin/main.cpp` of the
 Assignment 1 code base.  The `clampedExp()` function raises `values[i]` to the power given by `exponents[i]` for all elements of the input array and clamps the resulting values at 9.999999.  In program 2, your job is to vectorize this piece of code so it can be run on a machine with SIMD vector instructions.
 
-However, rather than craft an implementation using SSE or AVX2 vector intrinsics that map to real vector instructions on modern CPUs, to make things a little easier, we're asking you to implement your version using CS348V's "fake vector intrinsics" defined in `CS348Vintrin.h`.   The `CS348Vintrin.h` library provides you with a set of vector instructions that operate
-on vector values and/or vector masks. (These functions don't translate to real CPU vector instructions, instead we simulate these operations for you in our library, and provide feedback that makes for easier debugging.)  As an example of using the CS348V intrinsics, a vectorized version of the `abs()` function is given in `main.cpp`. This example contains some basic vector loads and stores and manipulates mask registers.  Note that the `abs()` example is only a simple example, and in fact the code does not correctly handle all inputs! (We will let you figure out why!) You may wish to read through all the comments and function definitions in `CS348Vintrin.h` to know what operations are available to you. 
+However, rather than craft an implementation using SSE or AVX2 vector intrinsics that map to real vector instructions on modern CPUs, to make things a little easier, we're asking you to implement your version using CS348K's "fake vector intrinsics" defined in `CS348Kintrin.h`.   The `CS348Kintrin.h` library provides you with a set of vector instructions that operate
+on vector values and/or vector masks. (These functions don't translate to real CPU vector instructions, instead we simulate these operations for you in our library, and provide feedback that makes for easier debugging.)  As an example of using the CS348K intrinsics, a vectorized version of the `abs()` function is given in `main.cpp`. This example contains some basic vector loads and stores and manipulates mask registers.  Note that the `abs()` example is only a simple example, and in fact the code does not correctly handle all inputs! (We will let you figure out why!) You may wish to read through all the comments and function definitions in `CS348Kintrin.h` to know what operations are available to you. 
 
 Here are few hints to help you in your implementation:
 
 -  Every vector instruction is subject to an optional mask parameter.  The mask parameter defines which lanes whose output is "masked" for this operation. A 0 in the mask indicates a lane is masked, and so its value will not be overwritten by the results of the vector operation. If no mask is specified in the operation, no lanes are masked. (Note this equivalent to providing a mask of all ones.) 
    *Hint:* Your solution will need to use multiple mask registers and various mask operations provided in the library.
--  *Hint:* Use `_cs348v_cntbits` function helpful in this problem.
+-  *Hint:* Use `_cs348k_cntbits` function helpful in this problem.
 -  Consider what might happen if the total number of loop iterations is not a multiple of SIMD vector width. We suggest you test 
-your code with `./myexp -s 3`. *Hint:* You might find `_cs348v_init_ones` helpful.
+your code with `./myexp -s 3`. *Hint:* You might find `_cs348k_init_ones` helpful.
 -  *Hint:* Use `./myexp -l` to print a log of executed vector instruction at the end. 
 Use function `addUserLog()` to add customized debug information in log. Feel free to add additional 
-`CS348VLogger.printLog()` to help you debug.
+`CS348KLogger.printLog()` to help you debug.
 
 The output of the program will tell you if your implementation generates correct output. If there
 are incorrect results, the program will print the first one it finds and print out a table of
 function inputs and outputs. Your function's output is after "output = ", which should match with 
-the results after "gold = ". The program also prints out a list of statistics describing utilization of the CS348V fake vector
+the results after "gold = ". The program also prints out a list of statistics describing utilization of the CS348K fake vector
 units. You should consider the performance of your implementation to be the value "Total Vector 
-Instructions". (You can assume every CS348V fake vector instruction takes one cycle on the CS348V fake SIMD CPU.) "Vector Utilization" 
+Instructions". (You can assume every CS348K fake vector instruction takes one cycle on the CS348K fake SIMD CPU.) "Vector Utilization" 
 shows the percentage of vector lanes that are enabled. 
 
 **What you need to do:**
@@ -120,7 +118,7 @@ shows the percentage of vector lanes that are enabled.
 1.  Implement a vectorized version of `clampedExpSerial` in `clampedExpVector` . Your implementation 
 should work with any combination of input array size (`N`) and vector width (`VECTOR_WIDTH`). 
 2.  Run `./myexp -s 10000` and sweep the vector width from 2, 4, 8, to 16. Record the resulting vector 
-utilization. You can do this by changing the `#define VECTOR_WIDTH` value in `CS348Vintrin.h`. 
+utilization. You can do this by changing the `#define VECTOR_WIDTH` value in `CS348Kintrin.h`. 
 Does the vector utilization increase, decrease or stay the same as `VECTOR_WIDTH` changes? Why?
 3.  _Extra credit: (1 point)_ Implement a vectorized version of `arraySumSerial` in `arraySumVector`. Your implementation may assume that `VECTOR_WIDTH` is a factor of the input array size `N`. Whereas the serial implementation has `O(N)` span, your implementation should have at most `O(N / VECTOR_WIDTH + log2(VECTOR_WIDTH))` span.  You may find the `hadd` and `interleave` operations useful.
 
