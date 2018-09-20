@@ -2,13 +2,13 @@
 #include <algorithm>
 #include <getopt.h>
 #include <math.h>
-#include "CS348Vintrin.h"
+#include "CS348Kintrin.h"
 #include "logger.h"
 using namespace std;
 
 #define EXP_MAX 10
 
-Logger CS348VLogger;
+Logger CS348KLogger;
 
 void usage(const char* progname);
 void initValue(float* values, int* exponents, float* output, float* gold, unsigned int N);
@@ -68,8 +68,8 @@ int main(int argc, char * argv[]) {
 
   printf("\e[1;31mCLAMPED EXPONENT\e[0m (required) \n");
   bool clampedCorrect = verifyResult(values, exponents, output, gold, N);
-  if (printLog) CS348VLogger.printLog();
-  CS348VLogger.printStats();
+  if (printLog) CS348KLogger.printLog();
+  CS348KLogger.printStats();
 
   printf("************************ Result Verification *************************\n");
   if (!clampedCorrect) {
@@ -176,12 +176,12 @@ void absSerial(float* values, float* output, int N) {
 }
 
 
-// implementation of absSerial() above, but it is vectorized using CS348V intrinsics
+// implementation of absSerial() above, but it is vectorized using CS348K intrinsics
 void absVector(float* values, float* output, int N) {
-  __cs348v_vec_float x;
-  __cs348v_vec_float result;
-  __cs348v_vec_float zero = _cs348v_vset_float(0.f);
-  __cs348v_mask maskAll, maskIsNegative, maskIsNotNegative;
+  __cs348k_vec_float x;
+  __cs348k_vec_float result;
+  __cs348k_vec_float zero = _cs348k_vset_float(0.f);
+  __cs348k_mask maskAll, maskIsNegative, maskIsNotNegative;
 
 //  Note: Take a careful look at this loop indexing.  This example
 //  code is not guaranteed to work when (N % VECTOR_WIDTH) != 0.
@@ -189,28 +189,28 @@ void absVector(float* values, float* output, int N) {
   for (int i=0; i<N; i+=VECTOR_WIDTH) {
 
     // All ones
-    maskAll = _cs348v_init_ones();
+    maskAll = _cs348k_init_ones();
 
     // All zeros
-    maskIsNegative = _cs348v_init_ones(0);
+    maskIsNegative = _cs348k_init_ones(0);
 
     // Load vector of values from contiguous memory addresses
-    _cs348v_vload_float(x, values+i, maskAll);               // x = values[i];
+    _cs348k_vload_float(x, values+i, maskAll);               // x = values[i];
 
     // Set mask according to predicate
-    _cs348v_vlt_float(maskIsNegative, x, zero, maskAll);     // if (x < 0) {
+    _cs348k_vlt_float(maskIsNegative, x, zero, maskAll);     // if (x < 0) {
 
     // Execute instruction using mask ("if" clause)
-    _cs348v_vsub_float(result, zero, x, maskIsNegative);      //   output[i] = -x;
+    _cs348k_vsub_float(result, zero, x, maskIsNegative);      //   output[i] = -x;
 
     // Inverse maskIsNegative to generate "else" mask
-    maskIsNotNegative = _cs348v_mask_not(maskIsNegative);     // } else {
+    maskIsNotNegative = _cs348k_mask_not(maskIsNegative);     // } else {
 
     // Execute instruction ("else" clause)
-    _cs348v_vload_float(result, values+i, maskIsNotNegative); //   output[i] = x; }
+    _cs348k_vload_float(result, values+i, maskIsNotNegative); //   output[i] = x; }
 
     // Write results back to memory
-    _cs348v_vstore_float(output+i, result, maskAll);
+    _cs348k_vstore_float(output+i, result, maskAll);
   }
 }
 
@@ -242,7 +242,7 @@ void clampedExpSerial(float* values, int* exponents, float* output, int N) {
 void clampedExpVector(float* values, int* exponents, float* output, int N) {
 
   //
-  // CS348V STUDENTS TODO: Implement your vectorized version of
+  // CS348K STUDENTS TODO: Implement your vectorized version of
   // clampedExpSerial() here.
   //
   // Your solution should work for any value of
@@ -267,7 +267,7 @@ float arraySumSerial(float* values, int N) {
 float arraySumVector(float* values, int N) {
   
   //
-  // CS348V STUDENTS TODO: Implement your vectorized version of arraySumSerial here
+  // CS348K STUDENTS TODO: Implement your vectorized version of arraySumSerial here
   //
   
   for (int i=0; i<N; i+=VECTOR_WIDTH) {

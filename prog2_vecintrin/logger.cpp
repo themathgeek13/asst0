@@ -1,7 +1,7 @@
 #include "logger.h"
-#include "CS348Vintrin.h"
+#include "CS348Kintrin.h"
 
-void Logger::addLog(const char * instruction, __cs348v_mask mask, int N) {
+void Logger::addLog(const char * instruction, __cs348k_mask mask, int N) {
   Log newLog;
   strcpy(newLog.instruction, instruction);
   newLog.mask = 0;

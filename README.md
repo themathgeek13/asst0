@@ -1,4 +1,4 @@
-# Optional Assignment: Performance Analysis on a Quad-Core CPU #
+# Assignment 0: Performance Analysis on a Quad-Core CPU #
 
 **100 points total + 6 points extra credit**
 
