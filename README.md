@@ -4,8 +4,11 @@
 
 ## Overview ##
 
-This assignment is intended to help you develop an understanding of the two
-primary forms of parallel execution present in a modern multi-core CPU:
+This assignment is an optional assignment for Stanford
+CS348K. Students are encouraged to attempt the assignment to learn (or
+review) basic concepts of how parallel code is mapped to the two
+primary forms of parallel execution present in a modern multi-core
+CPU:
 
 1. SIMD execution within a single processing core
 2. Parallel execution using multiple cores (You'll see effects of Intel Hyper-Threading as well.)
@@ -360,12 +363,7 @@ Notes: Some students have gotten hung up on this question (thinking too hard) in
 
 ## Hand-in Instructions ##
 
-Handin will be performed via [Canvas](https://canvas.stanford.edu/). I'd like everyone to hand in a zip file which contains two files:
-
-* Your writeup, in a file called `writeup.pdf`
-* Your implementation of `main.cpp` in Program 2, in a file called `prob2.cpp`
-
-If you would like to hand in code, for example, because you successfully completed an extra credit, you are free to include that as well. Please tell the staff to look for your extra credit in your writeup. When handed in, all code must be compilable and runnable!
+This is an optional assignment.  You are encouraged to complete a full writeup, and discuss your written solutions with the course staff.
 
 ## Resources and Notes ##
 
