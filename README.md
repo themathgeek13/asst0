@@ -38,8 +38,8 @@ To get started:
 ## Program 1: Parallel Fractal Generation Using Pthreads (25 points) ##
 
 Build and run the code in the `prog1_mandelbrot_threads/` directory of
-the code base. This program produces the image file
-`mandelbrot-serial.ppm`, which is a visualization of a famous set of
+the code base. (Type `make` to build, and `./mandelbrot` to run it.)
+This program produces the image file `mandelbrot-serial.ppm`, which is a visualization of a famous set of
 complex numbers called the Mandelbrot set. (Most platforms have a .ppm
 view. For example, to view the resulting images remotely, use `ssh -Y`
 and the `display` command.) As you can see in the images below, the
