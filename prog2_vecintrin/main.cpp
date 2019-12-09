@@ -248,7 +248,60 @@ void clampedExpVector(float* values, int* exponents, float* output, int N) {
   // Your solution should work for any value of
   // N and VECTOR_WIDTH, not just when VECTOR_WIDTH divides N
   //
-  
+    __cs348k_vec_float x;
+  __cs348k_vec_int e;
+  __cs348k_vec_int count;
+  __cs348k_vec_float result;
+  __cs348k_vec_int zero = _cs348k_vset_int(0);
+  __cs348k_vec_int one = _cs348k_vset_int(1);
+  __cs348k_vec_float clamp = _cs348k_vset_float(9.999999f);
+  __cs348k_mask maskLast, maskAll, maskIsNegative, maskIsNotNegative, maskIsZero, maskIsNotZero, maskCountZero, maskCountNonZero, maskClamp;
+  for (int i=0; i<N; i+=VECTOR_WIDTH) {
+
+    if(i+VECTOR_WIDTH>=N)
+      maskLast = _cs348k_init_ones(N-i);  
+
+    // All ones
+    maskAll = _cs348k_init_ones();
+
+    // All zeros
+    maskIsZero = _cs348k_init_ones(0);
+
+    // Load vector of values from contiguous memory addresses
+    _cs348k_vload_float(x, values+i, maskAll);               // x = values[i];
+    _cs348k_vload_int(e, exponents+i, maskAll);
+
+    // Set mask according to predicate
+    _cs348k_veq_int(maskIsZero, e, zero, maskAll);     // if (e == 0) {
+
+    _cs348k_vset_float(result, 1.f, maskIsZero);        // set output as 1
+
+    // Inverse maskIsNegative to generate "else" mask
+    maskIsNotZero = _cs348k_mask_not(maskIsZero);     // } else {
+
+    _cs348k_vset_int(count, 0, maskAll);  //init count with zeros
+    _cs348k_vload_int(count, exponents+i, maskIsNotZero); //set to exp at non-zero exp locs
+    _cs348k_vsub_int(count, count, one, maskIsNotZero);   //subtract 1 to start process
+    _cs348k_vload_float(result, values+i, maskIsNotZero); //load value
+
+    maskCountZero = _cs348k_init_ones(0);
+    _cs348k_veq_int(maskCountZero, count, zero, maskAll);
+    maskCountNonZero = _cs348k_mask_not(maskCountZero);
+    while(_cs348k_cntbits(maskCountNonZero))
+    {
+
+        //printf("%d", _cs348k_cntbits(maskCountNonZero));
+        _cs348k_vgt_int(maskCountNonZero, count, zero, maskCountNonZero);   // find all zero counts
+        _cs348k_vmult_float(result, result, x, maskCountNonZero);
+        _cs348k_vsub_int(count, count, one, maskCountNonZero);
+    }
+    maskClamp = _cs348k_init_ones();
+    _cs348k_vgt_float(maskClamp, result, clamp, maskClamp);
+    _cs348k_vset_float(result, 9.999999f, maskClamp);
+    
+    // Write results back to memory
+    _cs348k_vstore_float(output+i, result, maskLast);
+  }
 }
 
 // returns the sum of all elements in values
