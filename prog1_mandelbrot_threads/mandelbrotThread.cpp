@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <pthread.h>
+#include <algorithm>
 
 #include "CycleTimer.h"
 
@@ -30,20 +31,33 @@ extern void mandelbrotSerial(
 void* workerThreadStart(void* threadArgs) {
 
     WorkerArgs* args = static_cast<WorkerArgs*>(threadArgs);
-    
+    double minThread = 1e30;
+    int i;
     // TODO FOR CS348V STUDENTS: Implement worker thread here. Each
     // thread should make a call to mandelbrotSerial to compute a part
     // of the output image.  For example, in a program that uses two
     // threads, thread 0 could compute the top half of the image and
     // thread 1 could compute the bottom half.
+    double startTime = CycleTimer::currentSeconds();
+    /* 
     mandelbrotSerial(args->x0, args->y0, args->x1, args->y1, 
             args->width, args->height, 
             args->threadId*args->height/args->numThreads, 
             args->height/args->numThreads, 
             args->maxIterations, args->output);
-    
-    printf("Hello world from thread %d\n", args->threadId);
-
+    */
+    for(i=0; i<int(args->height/args->numThreads); ++i)
+    {
+        int pos = args->numThreads*i + args->threadId;
+        mandelbrotSerial(args->x0, args->y0, args->x1, args->y1, 
+            args->width, args->height, 
+            pos, 
+            1, 
+            args->maxIterations, args->output);
+    }
+    double endTime = CycleTimer::currentSeconds();
+    minThread = std::min(minThread, endTime - startTime);
+    printf("Thread %d time: %.3f\n", args->threadId, minThread);
     return NULL;
 }
 
